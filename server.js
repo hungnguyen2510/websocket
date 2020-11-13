@@ -1,17 +1,8 @@
 const http = require('http');
-const WebSocketServer = require('websocket').server;
-const server = http.createServer();
-server.listen(8080);
-const wsServer = new WebSocketServer({
-    httpServer: server
+const static = require('node-static');
+const file = new static.Server('./');
+const server = http.createServer((req, res) => {
+  req.addListener('end', () => file.serve(req, res)).resume();
 });
-wsServer.on('request', function(request) {
-    const connection = request.accept(null, request.origin);
-    connection.on('message', function(message) {
-      console.log('Received Message:', message.utf8Data);
-      connection.sendUTF('Hi this is WebSocket server!');
-    });
-    connection.on('close', function(reasonCode, description) {
-        console.log('ngat ket noi.');
-    });
-});
+const port = 3210;
+server.listen(port, () => console.log(`Server running at http://localhost:${port}`));
