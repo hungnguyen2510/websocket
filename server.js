@@ -12,6 +12,6 @@ wsServer.on('request', function(request) {
       connection.sendUTF('Hi this is WebSocket server!');
     });
     connection.on('close', function(reasonCode, description) {
-        console.log('Client has disconnected.');
+        console.log('ngat ket noi.');
     });
 });
