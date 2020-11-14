@@ -2,9 +2,9 @@ import asyncio
 import websockets
 
 
-port = 8080
+port = 55666
 async def test():
-    uri = "ws://localhost:"+str(port)
+    uri = "ws://118.69.126.48:"+str(port)
     async with websockets.connect(uri) as websocket:
         s = input("Input: ")
 
