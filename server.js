@@ -1,12 +1,21 @@
+const express = require("express");
+const http = require("http");
 const WebSocket = require("ws");
 
 const port = 55666;
-const wss = new WebSocket.Server({ port: port });
+const server = http.createServer(express);
+const wss = new WebSocket.Server({ server });
 
-console.log(`Server run at port => ${port}`);
-wss.on("connection", (ws) => {
-  ws.on("message", (message) => {
-    console.log(`Received message => ${message}`);
-    ws.broadcast(`Server send: ${message}`);
+wss.on("connection", function connection(ws) {
+  ws.on("message", function incoming(data) {
+    wss.clients.forEach(function each(client) {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    });
   });
+});
+
+server.listen(port, function () {
+  console.log(`Server is listening on ${port}!`);
 });
